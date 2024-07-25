@@ -42,9 +42,7 @@ class Extractor:
 
 
 if __name__ == "__main__":
-    file_name = "ESLII_print12_toc.pdf"
-    # https://hastie.su.domains/ElemStatLearn/printings/ESLII_print12_toc.pdf)
-    # https://hastie.su.domains/ElemStatLearn/
+    file_name = "Introduction to Computation and Programming Using Python by John V. Guttag (z-lib.org).pdf"
 
     extractor = Extractor()
     extractor.extract_text_from_pdf(file_name, file_name + ".txt")

@@ -6,6 +6,8 @@ from gensim.models import LdaModel
 from gensim.utils import simple_preprocess
 
 from anytree import Node, RenderTree
+from anytree.importer import JsonImporter
+from anytree.exporter import JsonExporter
 from uuid import uuid4
 
 # Download the tokenizer models
@@ -76,6 +78,29 @@ def split_into_hierarchy(sentences, min_len_chapters=15000, min_len_sections=750
     return chapters, sections, paragraphs
 
 
+def write_tree(root, output_file):
+    # Serialize the tree to JSON
+    exporter = JsonExporter(indent=2, sort_keys=False)
+    json_data = exporter.export(root)
+
+    # Save the JSON data to a file
+    with open(output_file + ".json", 'w') as f:
+        f.write(json_data)
+    print("Wrote tree to JSON file.")
+
+
+def read_tree(input_file):
+    # Read the JSON data from the JSON FILE
+    with open(input_file, 'r') as f:
+        json_data = f.read()
+
+    # Deserialize the tree from JSON
+    importer = JsonImporter()
+    root = importer.import_(json_data)
+    print("Read tree from JSON file.")
+    return root
+
+
 def text_to_tree(txt_file_name, n_chapters=15, n_sections=5, n_paragraphs=7):
     n_chapters = 15
     n_sections = 5
@@ -98,20 +123,21 @@ def text_to_tree(txt_file_name, n_chapters=15, n_sections=5, n_paragraphs=7):
     chapters, sections, paragraphs = split_into_hierarchy(sentences, min_len_chapters, min_len_sections,
                                                           min_len_paragraphs)
 
-    root = Node("Textbook", id=generate_unique_id())
+    root = Node(f"Textbook: {txt_file_name}", id=generate_unique_id())
 
     # Create the tree
     for i, _ in enumerate(chapters):
         chapter_node = Node(f"Chapter {i + 1}", parent=root, id=generate_unique_id())
         for j, _ in enumerate(sections[i]):
-            section_node = Node(f"Section {j + 1}", parent=chapter_node, id=generate_unique_id())
+            section_node = Node(f"Section", parent=chapter_node, id=generate_unique_id())
             for k, para in enumerate(paragraphs[i][j]):
-                Node(f"Paragraph {k + 1}: {para}", parent=section_node, id=generate_unique_id())
+                Node(f"{para}", parent=section_node, id=generate_unique_id())
 
     # Print the tree using RenderTree
     print_tree(root)
+    write_tree(root, txt_file_name)
     return root
 
 
 if __name__ == "__main__":
-    text_to_tree("PrinciplesofFinance-WEB.pdf.txt")
+    text_to_tree("Introduction to Computation and Programming Using Python by John V. Guttag (z-lib.org).pdf.txt")
