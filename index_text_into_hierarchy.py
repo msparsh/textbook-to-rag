@@ -84,7 +84,7 @@ def write_tree(root, output_file):
     json_data = exporter.export(root)
 
     # Save the JSON data to a file
-    with open(output_file + ".json", 'w') as f:
+    with open("out/hierarchy.json", 'w') as f:
         f.write(json_data)
     print("Wrote tree to JSON file.")
 
@@ -140,4 +140,4 @@ def text_to_tree(txt_file_name, n_chapters=15, n_sections=5, n_paragraphs=7):
 
 
 if __name__ == "__main__":
-    text_to_tree("Introduction to Computation and Programming Using Python by John V. Guttag (z-lib.org).pdf.txt")
+    text_to_tree("out/textfile.txt")

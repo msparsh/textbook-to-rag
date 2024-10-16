@@ -6,7 +6,7 @@ from PyPDF2 import PdfReader
 class Extractor:
 
     def write_out(self, text, out_file_path):
-        with open(out_file_path, 'w') as text_file:
+        with open(out_file_path, 'w+') as text_file:
             text_file.write(text)
         print(f"Text extracted and saved to {out_file_path}")
 
@@ -45,4 +45,4 @@ if __name__ == "__main__":
     file_name = "Introduction to Computation and Programming Using Python by John V. Guttag (z-lib.org).pdf"
 
     extractor = Extractor()
-    extractor.extract_text_from_pdf(file_name, file_name + ".txt")
+    extractor.extract_text_from_pdf(file_name, "out/textfile.txt")
